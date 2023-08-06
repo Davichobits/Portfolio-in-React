@@ -20,6 +20,13 @@
   color: white;
 }
 
+.App-header > nav{
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

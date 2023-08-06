@@ -1,74 +1,55 @@
 import { useState, useEffect } from "react";
+import { List } from "../components/List";
 import { Link } from "../components/Link";
-import './Profile.css'
+import "./Profile.css";
 
-export const Profile = ({userName}) => {
+export const Profile = ({ userName }) => {
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState([])
+  const [profile, setProfile] = useState([]);
 
-  useEffect(()=>{
-    async function fetchData(){
-      const profile = await fetch(`https://api.github.com/users/${userName}`)
-      const result = await profile.json()
-      if(result){
-        setProfile(result)
-        setLoading(false)
+  useEffect(() => {
+    async function fetchData() {
+      const profile = await fetch(`https://api.github.com/users/${userName}`);
+      const result = await profile.json();
+      if (result) {
+        setProfile(result);
+        setLoading(false);
       }
     }
     fetchData();
-  }, [])
+  }, []);
 
-  console.log(profile)
+  const items = [
+    {
+      field: "html_url",
+      value: <Link url={profile.html_url} title={profile.html_url} />,
+    },
+    {
+      field: "repos_url",
+      value: <Link url={profile.repos_url} title={profile.repos_url} />,
+    },
+    { field: "name", value: profile.name },
+    { field: "company", value: profile.company },
+    { field: "location", value: profile.location },
+    { field: "email", value: profile.email },
+    { field: "bio", value: profile.bio },
+  ];
 
   return (
     <div className="Profile-container">
       <h2>About Me</h2>
-      {
-        loading ? <span>Loading...</span>: 
+      {loading ? (
+        <span>Loading...</span>
+      ) : (
         <>
-        <img 
-          className="Profile-avatar"
-          src={profile.avatar_url}
-          alt={profile.name}
-        />
-        <ul>
-          <li>
-            <span>html_url:</span>
-            <Link
-              url={profile.html_url}
-              title={profile.html_url}
-            />
-          </li>
-          <li>
-            <span>repos_url:</span>
-            <Link
-              url={profile.repos_url}
-              title={profile.repos_url}
-            />
-          </li>
-          <li>
-            <span>name:</span>
-            {profile.name}
-          </li>
-          <li>
-            <span>company:</span>
-            {profile.company}
-          </li>
-          <li>
-            <span>location:</span>
-            {profile.location}
-          </li>
-          <li>
-            <span>email:</span>
-            {profile.email}
-          </li>
-          <li>
-            <span>bio:</span>
-            {profile.bio}
-          </li>
-        </ul>
+          <img
+            className="Profile-avatar"
+            src={profile.avatar_url}
+            alt={profile.name}
+          />
+          <List items={items} />
         </>
-      }
+      )}
     </div>
-  )
-}
+  );
+};
